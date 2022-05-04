@@ -1,4 +1,4 @@
 # SHM Signal Processing 
 
-Description: \br
+Description: 
 - This repo contains the common functions used for the pre-processing steps of Structural Health Monitoring Time-Series data.
