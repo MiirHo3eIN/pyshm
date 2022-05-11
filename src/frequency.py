@@ -43,9 +43,9 @@ def fft_phase(x):
 def modal_frequency(freq, x_amp, axis): 
 	"""
 	
-	Computes the frequency and amplitude of the first natural frequency of input array
+	Computes the frequency and amplitude of the first natural frequency of 1D/2D input array
 
-	:param freq: 	array-like - Frequency range
+	:param freq: 	array-like - Frequency bandwidth 
 	:param x_amp: 	array-like - Frequency amplitudes 
 	:param axis:	int, optional - Axis over which to compute peak frequency.
 	:return:		Dictionary - Peak Frequency , Peak Amplitude. 	  
@@ -55,6 +55,38 @@ def modal_frequency(freq, x_amp, axis):
 	peak_freq = freq[np.argmax(x_amp, axis = axis)]
 
 	return {"peak_freq": peak_freq, "peak_amp":peak_amp}
+
+def peak_width(freq, x):
+	"""
+	Computes the width of the first natural frequency of 1D input array utilizing power method. 
+	Delta_f = | f[p/sqrt(2)] - f[p/sqrt(2)] |
+	width =  Delta_f/ (2*f[p])	
+	
+	:param freq: array-like - Frequency bandwidth
+	:param x:	 array-like - Input Array. It must be in frequency domain. 
+	:return: 	 Dictionary - Delta Frequency , width
+	"""  
+    rms_val = np.max(x)/np.sqrt(2)
+    peak_idx = np.argmax(x) 
+    
+    x_l = x[peak_idx-6 : peak_idx+1]
+    y_l = freq[peak_idx-6 : peak_idx+1]
+    
+    x_r = x[peak_idx : peak_idx+6]
+    y_r = freq[peak_idx : peak_idx+6]
+    
+    
+    func_l = interp1d(x_l, y_l, kind = 'linear')
+    func_r = interp1d(x_r, y_r, kind = 'linear')
+    
+    f_l = func_l(rms_val)
+    f_r = func_r(rms_val)
+    
+    
+    delta = f_r - f_l 
+    
+    width = (f_r - f_l) / (2 * freq[peak_idx])
+    return {'delta': delta, 'width':width} 
 
 
 
