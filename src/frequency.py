@@ -3,7 +3,7 @@ import scipy
 
 from scipy import signal 
 from scipy.fft import fft, fftfreq 
-
+from scipy.interpolate import interp1d
 
 def fft_amplitude(x, fs, axis):
 	"""
