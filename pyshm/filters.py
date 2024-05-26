@@ -31,8 +31,8 @@ class LowPassFilter():
                                        output='sos', 
                                        fs=self.fs)
     
-    def forward(self, x) -> np.array: 
-        return signal.sosfilt(self.sos, x)
+    def forward(self, x:np.array, axis:int) -> np.array: 
+        return signal.sosfiltfilt(self.sos, x, axis = axis)
     
-    def __call__(self, x:np.array) -> np.array:
-        return self.forward(x)
+    def __call__(self, x:np.array, axis:int) -> np.array:
+        return self.forward(x, axis)
