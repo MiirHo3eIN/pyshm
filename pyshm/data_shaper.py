@@ -3,6 +3,19 @@ import matplotlib.pyplot as plt
 
 
 class shaper():
+    __doc__ = r"""
+    
+    @breif: A class that shapes a 1D signal into overlapping sequences of a fixed window size.
+            The class accepts a 1d numpy array and returns a 2d numpy array of overlapping sequences.
+            Input shape: (n_samples, 1), 
+            Output shape: (n_samples, window_size) with stride = stride
+    @param:
+        - window_size: The size of each small window
+        - stride: The stride of the window between each sequence
+
+    """
+
+
     def __init__(self, window_size: int, stride: int, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs) 
 
