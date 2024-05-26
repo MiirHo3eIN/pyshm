@@ -6,7 +6,7 @@ import scipy.signal as signal
 
 
 
-class LowPassFilter(): 
+class LowPassFilter: 
     __doc__ = r""" 
 
     @brief: This class is a simple wrapper around the scipy signal class 

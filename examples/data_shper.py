@@ -11,7 +11,7 @@ def tester():
     x = np.sin(2*np.pi*fs*x/N)
     t = np.arange(len(x)) / fs
     x = x.reshape(-1, 1)
-    data_shaper = shaper(window_size = 100, stride = 50)
+    data_shaper = shaper(sequence_len = 100, stride = 50)
     x_shaped = data_shaper(x)    
     colors = ['red', 'blue', 'yellow', 'orange', 'purple']
     
@@ -28,7 +28,7 @@ def tester():
             plt.plot(t_shaped[i, :] ,x_shaped[i, :], color = clr, label = f'Shaped Signal {i}', linestyle = '--')
             plt.legend()
 
-    data_shaper = shaper(window_size = 100, stride = 100)
+    data_shaper = shaper(sequence_len = 100, stride = 100)
     x_shaped = data_shaper(x)
     t_shaped = data_shaper(t)
 
