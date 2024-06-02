@@ -3,7 +3,7 @@ from sklearn.preprocessing import StandardScaler
 from dataShaper import shaper
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import pandas as pd 
 
 class Ztranform:
     __doc__ = r"""
@@ -46,21 +46,37 @@ class Ztranform:
 
 def from_raw_to_scaled(train, valid):
 
+    print("Statistical properties of the signal before scaling:" ) 
+    print(np.mean(train, axis = 1) )
+    print(np.std(train, axis=1) )
+
     scaler = StandardScaler()
     scaler.fit(train)
 
-    train_scaled = scaler.transform(train)
+    train_scaled = scaler.fit_transform(train)
+
+    print("Statistical properties of the signal before scaling:" ) 
+    print(np.mean(train_scaled, axis = 1) )
+    print(np.std(train_scaled, axis=1) )
+    
     valid_scaled = scaler.transform(valid)
+
+    # print(f"Mean of the train signal: {scaler.mean_}, Standard deviation of the train signal: {np.sqrt(scaler.var_)}")
     with sns.plotting_context("poster"):
         plt.figure(figsize= (16, 4)) 
         plt.plot(train[0, :], color = 'green', label = 'Original Signal')
         plt.plot(train_scaled[0, :], color = 'red', label = 'Scaled Signal')
         plt.legend()
 
-        plt.figure(figsize= (16, 4))
-        plt.plot(valid[0, :], color = 'green', label = 'Original Signal')
-        plt.plot(valid_scaled[0, :], color = 'red', label = 'Scaled Signal')
-        plt.legend()
+        # plt.figure(figsize= (16, 4))
+        # plt.plot(valid[0, :], color = 'green', label = 'Original Signal')
+        # plt.plot(valid_scaled[0, :], color = 'red', label = 'Scaled Signal')
+        # plt.legend()
+        flatten_data = train_scaled.flatten('C').reshape(-1, 1)
+        print(flatten_data.shape)
+        plt.figure()
+        plt.plot(flatten_data[:, 0])
+
         plt.show()
     
     return train_scaled, valid_scaled
@@ -73,25 +89,16 @@ if __name__ == '__main__':
     fs = 100
 
     DataShaper = shaper(sequence_len = 100, stride = 100)
-    # Create a random signal 
 
-    
+    df_test = pd.read_feather('../data/exp_2.feather')
 
-    x = np.arange(start= 0, stop = N1, step = 1)
-    
-    x_train , x_valid = np.split(x, 2)
-    print(x_train.shape, x_valid.shape)
-    
-    
-
-
-    x_train_org =  np.sin(2*np.pi*fs*x_train/(2*N1))
-    x_valid_org =  np.sin(2*np.pi*fs*x_valid/(2*N1))
-
+    x = df_test['x'].values[4_000:]
+    print(x.shape)
+    x_shaped = DataShaper(x.reshape( -1, 1))
     plt.figure()
-    plt.plot(x_valid_org[:100])
+    plt.plot(x )
     plt.show()
-    _ , _ = from_raw_to_scaled((x_train_org).reshape(-1, x_train_org.shape[-1]), x_valid_org.reshape(-1, x_valid_org.shape[-1]))
+    _ , _ = from_raw_to_scaled(x_shaped, x_shaped)
     exit()
     x_train = x_train_org.reshape(-1, 1)
     x_train_shaped = DataShaper(x_train)

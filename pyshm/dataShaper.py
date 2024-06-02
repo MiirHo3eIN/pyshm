@@ -46,3 +46,31 @@ class shaper:
 
 
 
+class MeanCentering:
+    __doc__ = r"""
+    
+    @breif: A class that center each window at 0. 
+    This class is critical for MEMS sensor data 
+    where the sensor is subject to drift over time.
+    
+    @param: axis : The axis to center the signal. Default is 1.
+
+    """
+
+    def __init__(self, axis) -> None:
+        self.axis = axis
+
+    def forward(self, x): 
+        __doc__ = r"""
+        @breif: The forward method that centers the signal at 0.
+        @param: x: The input signal must be a 2D numpy array 
+        with shape (n_samples, n_features) for axis = 1. 
+        For axis = 0, the shape must be (n_features, n_samples).
+
+        @return: The centered signal at 0.
+        """
+        return x - np.mean(x, axis = self.axis)
+
+    def __call__(self, x): 
+        
+        return self.forward(x)
