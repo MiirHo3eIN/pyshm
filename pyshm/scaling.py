@@ -1,6 +1,6 @@
 import numpy as np 
 from sklearn.preprocessing import StandardScaler
-from dataShaper import shaper
+from dataShaper import shaper, MeanCentering
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd 
@@ -89,40 +89,49 @@ if __name__ == '__main__':
     fs = 100
 
     DataShaper = shaper(sequence_len = 100, stride = 100)
-
+    MeanCenter = MeanCentering(axis = 0)
     df_test = pd.read_feather('../data/exp_2.feather')
 
     x = df_test['x'].values[4_000:]
+    x_center = MeanCenter(x)
+
+    plt.figure()
+    plt.plot(x_center.flatten('C').reshape(-1, 1))
+    plt.show()
+
+    exit()
     print(x.shape)
     x_shaped = DataShaper(x.reshape( -1, 1))
-    plt.figure()
-    plt.plot(x )
-    plt.show()
-    _ , _ = from_raw_to_scaled(x_shaped, x_shaped)
-    exit()
-    x_train = x_train_org.reshape(-1, 1)
-    x_train_shaped = DataShaper(x_train)
-    x_valid = x_valid_org.reshape(-1, 1)
-    x_valid_shaped = DataShaper(x_valid)
+    print(x_shaped.shape)
+    x_centered = MeanCenter(x_shaped)
+    # _ , _ = from_raw_to_scaled(x_shaped, x_shaped)
+    # # exit()
+    # x_train = x_train_org.reshape(-1, 1)
+    # x_train_shaped = DataShaper(x_train)
+    # x_valid = x_valid_org.reshape(-1, 1)
+    # x_valid_shaped = DataShaper(x_valid)
     
-    print(f"Train shape: {x_train_shaped.shape}, Valid shape: {x_valid_shaped.shape}")
+    # print(f"Train shape: {x_train_shaped.shape}, Valid shape: {x_valid_shaped.shape}")
 
     
 
     ztransform = Ztranform()
-    x_tr_scaled = ztransform(x_train_shaped, input_type = 'train')
+    x_tr_scaled = ztransform(x_centered, input_type = 'train')
     print(x_tr_scaled.shape)
-    x_val_scaled = ztransform(x_valid_shaped, input_type = 'test')
-    print(x_val_scaled.shape)
+
+
+    exit()
+    # x_val_scaled = ztransform(x_valid_shaped, input_type = 'test')
+    # print(x_val_scaled.shape)
     
 
     with sns.plotting_context("poster"):
-        plt.figure(figsize= (16, 4))
-        plt.plot(x_train_org[:100], color = 'green', label = 'Original Signal')
+        # plt.figure(figsize= (16, 4))
+        # plt.plot(x_centered[0, :], color = 'green', label = 'Original Signal')
         plt.figure(figsize= (16, 4))
 
-        plt.plot(x_train[0, :], color = 'green', label = 'Trained Scaled Signal')
-        plt.plot(x_tr_scaled[0, :], color = 'red', label = 'Valid Scaled Signal')
+        plt.plot(x_centered[0, :], color = 'green', label = 'Original Signal')
+        plt.plot(x_tr_scaled[0, :], color = 'red', label = 'Trained Scaled Signal')
         plt.legend()
         plt.show()
     

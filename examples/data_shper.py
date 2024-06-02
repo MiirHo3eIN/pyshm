@@ -4,7 +4,7 @@ import seaborn as sns
 from pyshm.dataShaper import shaper, MeanCentering
 
 def tester(): 
-    N = 10_000
+    N = 12_000
     fs = 100
     # Create a random signal 
     x = np.arange(N)
@@ -30,6 +30,7 @@ def tester():
 
     data_shaper = shaper(sequence_len = 100, stride = 100)
     x_shaped = data_shaper(x)
+    print(f"Shape of the data {x_shaped.shape}")
     t_shaped = data_shaper(t)
 
     with sns.plotting_context("poster"):
@@ -40,7 +41,7 @@ def tester():
             plt.plot(t_shaped[i, :] ,x_shaped[i, :], color = clr, label = f'Shaped Signal {i}', linestyle = '--')
             plt.legend()
     
-    MeanCenterer = MeanCentering(axis = 1)
+    MeanCenterer = MeanCentering(axis = 0)
     x_mean_centered = MeanCenterer(x_shaped)
 
     with sns.plotting_context("poster"):
