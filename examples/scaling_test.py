@@ -18,8 +18,7 @@ import seaborn as sns
 
 
 from pyshm.dataShaper import shaper, MeanCentering
-from pyshm.scaling import Ztranform 
-
+from pyshm.scaling import Ztranform , Normalization
 
 
 VERBOSE = True
@@ -41,11 +40,13 @@ if __name__ == '__main__':
 
     sequence_length = 100 
     windpw_stride = 100 
+    data_range = (-1, 1)
+
 
     data_shaper = shaper(sequence_len = sequence_length, stride = windpw_stride)
     MeanCenter = MeanCentering(axis = 0)
     ztransform = Ztranform()
-    
+    minmax_norm = Normalization(feature_range= data_range, clip = True)
     # Load the data
     df_train = pd.read_feather('../data/exp_2.feather')
     df_test  = pd.read_feather('../data/exp_3.feather')
@@ -79,9 +80,16 @@ if __name__ == '__main__':
         print(f"Scaled Train Shape = {x_tr_scaled.shape}")
         print(f"Test Shape = {x_ts_scaled.shape}") 
 
+    x_tr_norm = minmax_norm(x_tr_scaled, input_type = 'train')
+    x_ts_norm = minmax_norm(x_ts_scaled, input_type = 'test') 
 
     
-    plot(x_tr_shaped, x_tr_scaled)
-    plot(x_ts_shaped, x_ts_scaled)
+    # plot(x_tr_shaped, x_tr_scaled)
+    # plot(x_ts_shaped, x_ts_scaled)
+
+    plot(x_tr_scaled, x_tr_norm)
+    plot(x_ts_scaled, x_ts_norm)
+    
+    
     plt.show()
     
