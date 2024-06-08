@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pyshm.dataShaper import shaper, MeanCentering
 
+
+
+sns.set_style(style="whitegrid")
+
+
 def tester(): 
     N = 12_000
     fs = 100
