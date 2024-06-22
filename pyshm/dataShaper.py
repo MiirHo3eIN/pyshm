@@ -37,7 +37,7 @@ class shaper:
         overlapping_sequences = [np.expand_dims(x[i*self.stride:i*self.stride+self.dim], axis=0) for i in range(N0)]
         overlapping_sequences = np.concatenate(overlapping_sequences, axis=0)
         overlapping_sequences = np.squeeze(overlapping_sequences, axis = -1)
-        print(overlapping_sequences.shape)
+        # print(overlapping_sequences.shape)
         return overlapping_sequences
     
     def __call__(self, x: np.array) -> np.array:
