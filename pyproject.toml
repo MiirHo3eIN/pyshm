@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyshm"
-version = "0.1.9"
+version = "0.1.10"
 authors = [
   { name="Amirhossein Moallemi", email="amirhmoallemi@gmail.com" },
   { name="Seyed Ahmad Mirsalari", email="seyedahmad.mirsalar2@unibo.it"}, 
