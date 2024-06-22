@@ -1,6 +1,6 @@
 import pandas as pd 
 
-
+# TODO: Document the script 
 
 
 
@@ -46,6 +46,7 @@ class dataInitHealthy(dataInitFeather):
             df_.append(pd.read_feather(f"{data_path}"))
         return pd.concat(df_)
     def forward(self):
+        self.__str__()
         return self.df_init()
     def __call__(self):
         return self.forward()   
@@ -63,6 +64,7 @@ class dataInitAnomaly(dataInitFeather):
             df_[f"anomaly_{int(anomaly-5)}"] = df_temp
         return df_
     def forward(self):
+        self.__str__()
         return self.df_init()
     def __call__(self):
         return self.forward()
