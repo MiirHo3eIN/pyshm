@@ -57,7 +57,7 @@ class dataInitAnomaly(dataInitFeather):
     def df_init(self) -> dict: 
         df_ = {}
         for anomaly in self.data_init():
-            print(anomaly)
+            
             data_path = f"{self.data_path}/exp_{anomaly}.feather"
             df_temp = (pd.read_feather(f"{data_path}"))
             df_[f"anomaly_{int(anomaly-5)}"] = df_temp
