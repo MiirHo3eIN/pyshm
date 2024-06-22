@@ -36,8 +36,8 @@ class dataInitFeather:
 
 
 class dataInitHealthy(dataInitFeather):
-    def __init__(self, dataset_type:str):
-        super().__init__(dataset_type)
+    def __init__(self, data_path, dataset_type:str):
+        super().__init__(data_path, dataset_type)
 
     def df_init(self) -> pd.DataFrame: 
         df_ = []
@@ -51,8 +51,8 @@ class dataInitHealthy(dataInitFeather):
         return self.forward()   
 
 class dataInitAnomaly(dataInitFeather):
-    def __init__(self):
-        super().__init__("anomaly")
+    def __init__(self, data_path:str):
+        super().__init__(data_path, "anomaly")
     
     def df_init(self) -> dict: 
         df_ = {}
