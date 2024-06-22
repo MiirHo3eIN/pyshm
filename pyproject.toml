@@ -14,7 +14,11 @@ description = "Unsupervised lightweight Anomaly Detection approaches for SHM sys
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+requires = [
+  "numpy",
+  "torch",
 ]
