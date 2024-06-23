@@ -4,17 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyshm"
-version = "0.1.10"
+version = "0.1.11"
 authors = [
   { name="Amirhossein Moallemi", email="amirhmoallemi@gmail.com" },
   { name="Seyed Ahmad Mirsalari", email="seyedahmad.mirsalar2@unibo.it"}, 
   { name="Amirhossein Kiamarzi", email="amirhossein.kiamarz2@unibo.it"},
 ]
 dependencies = [
-    "build>=1.2.1"
-    "numpy^1.26.4",
+    "build>=1.2.1",
+    "numpy~=1.26.4",
     "pandas",
-    "torch^2.2.2",
+    "torch~=2.2.2",
     "tsaug"
 ]
 description = "Unsupervised lightweight Anomaly Detection approaches for SHM systems."
