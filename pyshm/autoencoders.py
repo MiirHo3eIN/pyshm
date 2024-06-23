@@ -92,7 +92,7 @@ class FcAutoEncoder(nn.Module):
         latent_dim: int,
         
         encoder_class: object = FcEncoder,
-        encodeer_activation: str = "linear",
+        encoder_activation: str = "linear",
         decoder_class: object = FcDecoder,
         decoder_activation: str = "linear",
 
@@ -103,12 +103,12 @@ class FcAutoEncoder(nn.Module):
         self.input_dim  = input_dim
         self.latent_dim = latent_dim
         self.device     = device
-        self.encoder_activation = encodeer_activation
+        self.encoder_activation = encoder_activation
         self.decoder_activation = decoder_activation
         
         # Define the encoder and decoder
         self.encoder = encoder_class(input_dim = self.input_dim, 
-                                     output_dim = self.latent_dim, 
+                                     latent_dim = self.latent_dim, 
                                      activation = self.encoder_activation)
         
         self.decoder = decoder_class(latent_dim = self.latent_dim, 
