@@ -95,7 +95,6 @@ class FcAutoEncoder(nn.Module):
         encoder_activation: str = "linear",
         decoder_class: object = FcDecoder,
         decoder_activation: str = "linear",
-
         device = 'cpu'
     ): 
         super().__init__()
