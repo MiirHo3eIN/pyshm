@@ -19,27 +19,31 @@ class PCA:
             matrix for eigen equation. 
         """
         # Accept the dataset Matrix and compute SVD
-
-        # Extract eigenValue and eigenVectors
-
+        U, S, V = svd(x)
+        print(type(S))
         # Extract the number of components 
-        # to have the minimum threshold entered by the user. 
-
+        # to have the minimum threshold entered by the user.
+        lcumsum = torch.cumsum(S/torch.sum(S), dim=0)
+        k = torch.argmax(lcumsum > self.energy)
         # yield eigenVectors while keeping them as the attributes of the class. 
-        pass 
+        self.n_components = k
+        # Extract eigenValue and eigenVectors
+        self.eigen_vectors = V[:, :self.n_components]
+        
+        return self.n_components, self.eigen_vectors 
     
 
     def project_(self, x):
         __doc__ = r"""
             Projecting an input data to latent space. 
         """
-        pass
+        return torch.mm(x, self.eigen_vectors)
 
     def reconstruct_(self, x):
         __doc__ = r"""
             This method reconstruct the  
         """
-        pass
+        return torch.mm(self.eigen_vectors.T, x)
 
     def eval(self, x):
         __doc__ = r"""
