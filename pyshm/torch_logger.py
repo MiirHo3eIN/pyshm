@@ -22,8 +22,8 @@ class SampleLogger:
         
         shuffled_data = self._shuffler(x)
         
-        for idx in range(0, x.shape[0]): 
-            self._tensor_logger(x[idx, :].to_device(self._device))
+        for idx in range(0, shuffled_data.shape[0]): 
+            self._tensor_logger(shuffled_data[idx, :].to_device(self._device))
             self._global_counter += 1
     
     
