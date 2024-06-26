@@ -6,3 +6,4 @@ from .dataloader import *
 from .torchLogger import *
 from .autoencoders import *
 from .pca import *
+from .dnnUtils import *
