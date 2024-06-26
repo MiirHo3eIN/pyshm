@@ -3,8 +3,8 @@ import torch
 
 
 
-class SampleLogger: 
-    def __init__(self, save_path, device):
+class TorchSampleLogger: 
+    def __init__(self, save_path: str, device: str= 'cpu'):
         self._global_counter = 0
         self._save_path = save_path
         self._device = device
