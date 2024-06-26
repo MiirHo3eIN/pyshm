@@ -3,6 +3,6 @@ from .dataShaper import *
 from .scaling import *
 from .augmentation import *
 from .dataloader import *
-from .torch_logger import *
+from .torchLogger import *
 from .autoencoders import *
 from .pca import *
