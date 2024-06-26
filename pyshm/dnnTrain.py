@@ -7,7 +7,7 @@ import os
 import time 
 
 
-from .dnnUtils import generate_hexadecimal, write_to_csv
+from .utils import generate_hexadecimal, write_to_csv
 
 
 # DO NOT change the following configurations. These features are not implemented yet.
