@@ -1,7 +1,7 @@
 import torch 
 from torch import svd
 
-
+from .utils import MSE
 class PCA:
     def __init__(self, preserved_energy):
         self.energy = preserved_energy
@@ -58,7 +58,7 @@ class PCA:
         x_reconstructed = self.reconstruct_(x_latent)
 
         # Compute the difference
-        # mse_error = MSE(x, x_reconstructed)
+        mse_error = MSE(x, x_reconstructed)
 
-        return x_reconstructed, #mse_error
+        return x_reconstructed, mse_error
 
