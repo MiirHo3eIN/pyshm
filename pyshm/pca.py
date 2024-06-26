@@ -20,13 +20,13 @@ class PCA:
         """
         # Accept the dataset Matrix and compute SVD
         U, S, V = svd(x)
-        print(type(S))
         # Extract the number of components 
         # to have the minimum threshold entered by the user.
         lcumsum = torch.cumsum(S/torch.sum(S), dim=0)
-        k = torch.argmax(lcumsum > self.energy)
+        k_components = len(lcumsum[lcumsum < self.energy])
+        
         # yield eigenVectors while keeping them as the attributes of the class. 
-        self.n_components = k
+        self.n_components = k_components + 1
         # Extract eigenValue and eigenVectors
         self.eigen_vectors = V[:, :self.n_components]
         
