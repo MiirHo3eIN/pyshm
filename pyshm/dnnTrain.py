@@ -84,7 +84,7 @@ class Train(nn.Module):
         self.output_filter = output_filter
         self.path = path
         self.e_stop = early_stop
-        self.reconstruction_loss = reconstruction_loss  
+        self.reconstruction_loss = nn.MSELoss() #if reconstruction_loss == "mse"
         if self.e_stop == True:
             self.early_stopper = EarlyStopper(patience=3, min_delta=5)
 
@@ -229,11 +229,6 @@ class Train(nn.Module):
 
             print(f"\t Train loss = {sum(train_epoch_loss)/len(train_epoch_loss):.05}, \
                     Validation Loss = {sum(valid_epoch_loss)/len(valid_epoch_loss):.05}")
-            if self.model.RVQ == True:
-                print("RVQ "
-                + f"cmt loss: {torch.mean(self.commit_loss).item():.3f} | "
-                + f"active %: {self.indices.unique().numel() / self.model.codebook_size * 100:.3f}"
-                )
 
             train_total_loss.append(sum(train_epoch_loss)/len(train_epoch_loss))
             valid_total_loss.append(sum(valid_epoch_loss)/len(valid_epoch_loss))
