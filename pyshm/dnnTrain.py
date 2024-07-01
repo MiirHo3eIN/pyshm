@@ -70,7 +70,7 @@ class Train(nn.Module):
     def __init__(self, model: object, 
                  epochs: int, 
                  alpha:float, 
-                 output_filter, 
+                 output_filter:bool, 
                  path:str, 
                  early_stop: bool = True,
                  pre_trained_path: str = "",

@@ -25,7 +25,7 @@ def main():
                                 decoder_activation= "sigmoid")
     # print the model 
     summary(autoencoder, input_size = data.size(), verbose = 1, depth = 5)
-
+    
 
 if __name__ == "__main__": 
     main()
