@@ -80,10 +80,13 @@ class Train(nn.Module):
         super().__init__(*args, **kwargs)
         self.model = model.to(device)
         self.epochs = epochs
+        self.start_epoch = 0 # if we want to start from a specific epoch
         self.alpha = alpha
         self.output_filter = output_filter
         self.path = path
         self.e_stop = early_stop
+        self.best_valid_loss = float('inf')
+        self.best_checkpoint_path = os.path.join(path, "best_checkpoint.pt")
         self.reconstruction_loss = nn.MSELoss() #if reconstruction_loss == "mse"
         if self.e_stop == True:
             self.early_stopper = EarlyStopper(patience=3, min_delta=5)
@@ -124,7 +127,8 @@ class Train(nn.Module):
                 'model_state_dict': self.model.state_dict(),
                 'optimizer_state_dict': self.optimizer.state_dict(),
                 'loss': loss,
-                }, f"{self.path}{epoch}_checkpoint.pt")
+        }, self.best_checkpoint_path)  
+                # }, f"{self.path}{epoch}_checkpoint.pt")
 
 
         return model_number 
@@ -134,14 +138,15 @@ class Train(nn.Module):
         checkpoint = torch.load(path)
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        epoch = checkpoint['epoch']
+        self.start_epoch = checkpoint['epoch']
         loss = checkpoint['loss']
+        self.best_valid_loss = checkpoint['loss']
 
         print("\n")
-        print("Model loaded from pre-trained, Epoch: " + str(epoch) + " Loss: " + str(loss))
+        print("Model loaded from pre-trained, Epoch: " + str(self.start_epoch) + " Loss: " + str(loss))
         print("\n")
 
-        return epoch, loss
+        return  loss
    
     def forward_propagation(self, x_batch, y_batch, idx, epoch ):
         x_batch = x_batch.to(device)
@@ -188,7 +193,7 @@ class Train(nn.Module):
             return valid_loss
 
 
-    def forward(self, train_x, valid_x):
+    def forward(self, train_x, valid_x, test_x):
         
         
         train_epoch_loss, valid_epoch_loss = [], []
@@ -202,7 +207,7 @@ class Train(nn.Module):
 
         
          
-        for epoch in np.arange(0, self.epochs):
+        for epoch in np.arange(self.start_epoch, self.epochs):
             #print("Inside the for loop")
             print(f"Epoch: {epoch+1}/{self.epochs}")
 
@@ -227,23 +232,42 @@ class Train(nn.Module):
                     valid_batch_loss += [valid_loss]
                     valid_epoch_loss += [(valid_loss.item())]
 
-            print(f"\t Train loss = {sum(train_epoch_loss)/len(train_epoch_loss):.05}, \
-                    Validation Loss = {sum(valid_epoch_loss)/len(valid_epoch_loss):.05}")
+            
+            # print(f"\t Train loss = {sum(train_epoch_loss)/len(train_epoch_loss):.05}, \
+            #         Validation Loss = {sum(valid_epoch_loss)/len(valid_epoch_loss):.05}")
 
-            train_total_loss.append(sum(train_epoch_loss)/len(train_epoch_loss))
-            valid_total_loss.append(sum(valid_epoch_loss)/len(valid_epoch_loss))
+            # train_total_loss.append(sum(train_epoch_loss)/len(train_epoch_loss))
+            # valid_total_loss.append(sum(valid_epoch_loss)/len(valid_epoch_loss))
 
             #save checkpoint
-            self.save_checkpoint(epoch, sum(train_epoch_loss)/len(train_epoch_loss))
+            # self.save_checkpoint(epoch, sum(train_epoch_loss)/len(train_epoch_loss))
+            # Save checkpoint if validation loss has decreased
+            
+            avg_train_loss = sum(train_epoch_loss) / len(train_epoch_loss)
+            avg_valid_loss = sum(valid_epoch_loss) / len(valid_epoch_loss)
+
+            print(f"\t Train loss = {avg_train_loss:.05}, Validation Loss = {avg_valid_loss:.05}")
+
+            train_total_loss.append(avg_train_loss)
+            valid_total_loss.append(avg_valid_loss)
+
+            # Save checkpoint if validation loss has decreased
+            if avg_valid_loss < self.best_valid_loss:
+                self.best_valid_loss = avg_valid_loss
+                self.save_checkpoint(epoch+1, avg_valid_loss)
+
+
 
             #early stop condition
             if self.e_stop == True and self.early_stopper.early_stop(sum(train_epoch_loss)/len(train_epoch_loss)):
+                print("Early stopping triggered.")
                 break
 
             train_epoch_loss, valid_epoch_loss = [], []
             train_batch_loss, valid_batch_loss = [], []
             idx = 0
 
+        
         time_end = time.time()
         train_time = time_end - time_start
         

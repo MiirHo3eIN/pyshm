@@ -30,7 +30,7 @@ class PCA:
         # Extract eigenValue and eigenVectors
         self.eigen_vectors = V[:, :self.n_components]
         
-        return self.n_components, self.eigen_vectors 
+        return self.n_components, self.eigen_vectors, V
     
 
     def project_(self, x):
